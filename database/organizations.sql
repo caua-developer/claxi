@@ -1,5 +1,5 @@
 CREATE TABLE
-    IF NOT EXISTS organization (
+    IF NOT EXISTS organizations (
         id UUID NOT NULL PRIMARY KEY,
         name TEXT NOT NULL,
         slug TEXT NOT NULL UNIQUE,

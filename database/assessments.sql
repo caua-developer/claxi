@@ -11,8 +11,8 @@ CREATE TABLE
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         archived_at TIMESTAMPTZ,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE CASCADE,
-        FOREIGN KEY (created_by) REFERENCES "user" (id) ON DELETE RESTRICT,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
+        FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE RESTRICT,
         FOREIGN KEY (type) REFERENCES assessment_types (id) ON DELETE RESTRICT,
         FOREIGN KEY (status) REFERENCES assessment_statuses (id) ON DELETE RESTRICT
     );

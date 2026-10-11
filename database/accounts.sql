@@ -1,5 +1,5 @@
 CREATE TABLE
-    IF NOT EXISTS account (
+    IF NOT EXISTS accounts (
         id UUID NOT NULL PRIMARY KEY,
         user_id UUID NOT NULL,
         account_id TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE
         password TEXT,
         created_at TIMESTAMPTZ NOT NULL,
         updated_at TIMESTAMPTZ NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
 
-CREATE INDEX IF NOT EXISTS account_user_id_idx ON account (user_id);
+CREATE INDEX IF NOT EXISTS accounts_user_id_idx ON accounts (user_id);

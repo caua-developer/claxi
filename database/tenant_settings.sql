@@ -7,8 +7,8 @@ CREATE TABLE
         updated_by UUID,
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE CASCADE,
-        FOREIGN KEY (updated_by) REFERENCES "user" (id) ON DELETE SET NULL,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
+        FOREIGN KEY (updated_by) REFERENCES users (id) ON DELETE SET NULL,
         CONSTRAINT uq_tenant_settings_org_key UNIQUE (organization_id, setting_key)
     );
 

@@ -12,10 +12,10 @@ CREATE TABLE
         created_by UUID,
         metadata JSONB NOT NULL DEFAULT '{}'::JSONB,
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE RESTRICT,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE RESTRICT,
         FOREIGN KEY (credit_account_id) REFERENCES credit_accounts (id) ON DELETE RESTRICT,
         FOREIGN KEY (generation_operation_id) REFERENCES ai_generation_operations (id) ON DELETE RESTRICT,
-        FOREIGN KEY (created_by) REFERENCES "user" (id) ON DELETE SET NULL,
+        FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE SET NULL,
         FOREIGN KEY (transaction_type) REFERENCES credit_transaction_types (id) ON DELETE RESTRICT,
         CONSTRAINT ck_credit_transaction_amount CHECK (
             (transaction_type = 'CONSUMPTION' AND amount < 0)

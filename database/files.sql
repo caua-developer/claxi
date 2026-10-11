@@ -10,8 +10,8 @@ CREATE TABLE
         size_bytes BIGINT NOT NULL,
         purpose TEXT NOT NULL DEFAULT 'OTHER',
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE CASCADE,
-        FOREIGN KEY (uploaded_by) REFERENCES "user" (id) ON DELETE RESTRICT,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
+        FOREIGN KEY (uploaded_by) REFERENCES users (id) ON DELETE RESTRICT,
         FOREIGN KEY (purpose) REFERENCES file_purposes (id) ON DELETE RESTRICT,
         CONSTRAINT ck_files_size CHECK (size_bytes >= 0)
     );

@@ -5,6 +5,6 @@ CREATE TABLE
         balance BIGINT NOT NULL DEFAULT 0,
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE RESTRICT,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE RESTRICT,
         CONSTRAINT ck_credit_accounts_balance CHECK (balance >= 0)
     );

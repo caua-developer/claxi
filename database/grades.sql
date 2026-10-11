@@ -7,7 +7,7 @@ CREATE TABLE
         education_stage TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE CASCADE,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
         FOREIGN KEY (education_stage) REFERENCES education_stages (id) ON DELETE RESTRICT,
         CONSTRAINT uq_grades_organization_name UNIQUE (organization_id, name),
         CONSTRAINT ck_grades_order_index CHECK (order_index >= 0)

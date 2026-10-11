@@ -7,7 +7,7 @@ CREATE TABLE
         description TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (organization_id) REFERENCES organization (id) ON DELETE CASCADE,
+        FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
         FOREIGN KEY (subject_id) REFERENCES subjects (id) ON DELETE RESTRICT,
         CONSTRAINT uq_topics_subject_name UNIQUE (subject_id, name)
     );

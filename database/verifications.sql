@@ -1,5 +1,5 @@
 CREATE TABLE
-    IF NOT EXISTS verification (
+    IF NOT EXISTS verifications (
         id UUID NOT NULL PRIMARY KEY,
         identifier TEXT NOT NULL,
         value TEXT NOT NULL,
@@ -8,4 +8,4 @@ CREATE TABLE
         updated_at TIMESTAMPTZ NOT NULL
     );
 
-CREATE INDEX IF NOT EXISTS verification_identifier_idx ON verification (identifier);
+CREATE INDEX IF NOT EXISTS verifications_identifier_idx ON verifications (identifier);
