@@ -1,0 +1,35 @@
+# Bundled JDK (large binary, machine-specific)
+.jdk/
+
+# Build output (Maven/Gradle, Spring Modulith generated docs, etc.)
+build/
+target/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Claude Code local settings (per-user, not shared)
+.claude/settings.local.json
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Node (future frontend workspace)
+node_modules/
+dist/
+.turbo/
+.next/
