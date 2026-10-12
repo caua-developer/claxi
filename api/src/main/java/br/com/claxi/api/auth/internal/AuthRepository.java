@@ -1,19 +1,16 @@
 package br.com.claxi.api.auth.internal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import br.com.claxi.api.auth.internal.domain.Account;
+import br.com.claxi.api.auth.internal.domain.AuditTimestamps;
+import br.com.claxi.api.auth.internal.domain.OAuthTokens;
 import br.com.claxi.api.auth.internal.domain.User;
-import br.com.claxi.api.shared.domain.Email;
 
 @Repository
 public class AuthRepository {
@@ -23,22 +20,19 @@ public class AuthRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<User> userMapper = (result, rowNum) -> {
-        User user = new User(
-                result.getObject("id", java.util.UUID.class),
-                result.getString("name"),
-                new Email(result.getString("email")),
-                result.getBoolean("email_verified"),
-                result.getString("image"),
-                result.getObject("created_at", java.time.OffsetDateTime.class),
-                result.getObject("updated_at", java.time.OffsetDateTime.class));
+    private final RowMapper<User> userMapper = (result, rowNum) -> new User(
+            result.getObject("id", UUID.class),
+            result.getString("name"),
+            result.getString("email"),
+            result.getBoolean("email_verified"),
+            result.getString("image"),
+            new AuditTimestamps(
+                    result.getObject("created_at", OffsetDateTime.class),
+                    result.getObject("updated_at", OffsetDateTime.class)));
 
-        return user;
-    };
-
-    public User findUserByEmail(Email email) {
+    public User findUserByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
-        return jdbcTemplate.queryForObject(sql, userMapper, email.getValue());
+        return jdbcTemplate.query(sql, userMapper, email).stream().findFirst().orElse(null);
     }
 
     public void createUser(User user) {
@@ -59,27 +53,33 @@ public class AuthRepository {
     }
 
     private final RowMapper<Account> accountMapper = (result, rowNum) -> {
-        Account account = new Account(
-                result.getObject("id", java.util.UUID.class),
-                result.getObject("user_id", java.util.UUID.class),
-                result.getString("account_id"),
-                result.getString("provider_id"),
-                result.getString("access_token"),
-                result.getString("refresh_token"),
-                result.getObject("access_token_expires_at", java.time.OffsetDateTime.class),
-                result.getObject("refresh_token_expires_at", java.time.OffsetDateTime.class),
-                result.getString("scope"),
-                result.getString("id_token"),
-                result.getString("password"),
-                result.getObject("created_at", java.time.OffsetDateTime.class),
-                result.getObject("updated_at", java.time.OffsetDateTime.class));
+        Account.Provider provider = Account.Provider.valueOf(result.getString("provider_id"));
 
-        return account;
+        OAuthTokens oauthTokens = provider == Account.Provider.GOOGLE
+                ? new OAuthTokens(
+                        result.getString("access_token"),
+                        result.getString("refresh_token"),
+                        result.getObject("access_token_expires_at", OffsetDateTime.class),
+                        result.getObject("refresh_token_expires_at", OffsetDateTime.class),
+                        result.getString("id_token"),
+                        result.getString("scope"))
+                : null;
+
+        return new Account(
+                result.getObject("id", UUID.class),
+                result.getObject("user_id", UUID.class),
+                result.getString("account_id"),
+                provider,
+                oauthTokens,
+                result.getString("password"),
+                new AuditTimestamps(
+                        result.getObject("created_at", OffsetDateTime.class),
+                        result.getObject("updated_at", OffsetDateTime.class)));
     };
 
     public Account findAccountByUserAndProviderId(UUID userId, String providerId) {
         String sql = "SELECT * FROM accounts WHERE user_id = ? AND provider_id = ?";
-        return jdbcTemplate.queryForObject(sql, accountMapper, userId, providerId);
+        return jdbcTemplate.query(sql, accountMapper, userId, providerId).stream().findFirst().orElse(null);
     }
 
     public void createAccount(Account account) {
